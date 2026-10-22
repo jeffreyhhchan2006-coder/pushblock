@@ -1,0 +1,30 @@
+MVP:
+	Game:
+		- Make reliable lose condition
+		- Add animations to scoring
+			- Freeze player actions and expunge timer until scoring is finished
+				- Use combo timer for unfreezing player actions and expunge timer
+			- Add block animations to when they are scored
+				- Freeze game board when animation is not finished
+				- After block animation is finished, unfreeze game board
+			- Add tiny popups for scoring
+				- Total score from pieces
+				- Combo multiplier
+				- Loopback Power
+		- Have result screen overlay after losing
+	Result:
+		- Show final score
+		- Show total blocks scored
+	Title:
+		- Have a nice looking title screen
+	High Score:
+		- Add screen showing high scores
+	Graphics:
+		- Add font
+		- Make blocks look nicer
+			- Add symbols for colorblind players
+			- Make shift block number on block look nicer
+		- Add UI
+			- How To Play overlay on game
+			- Nice looking player UI for displaying score and combo number
+		

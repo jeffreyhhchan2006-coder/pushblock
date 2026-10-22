@@ -1,0 +1,10 @@
+EXPUNGE_BOARD_BLOCKS = true
+
+--Unused currently
+DEBUG_MODE = false
+SPELL_TEST = false
+INSTANT_WIN = false
+SCORE_CHAINING = false
+COMEBACK_MECHANIC = false
+MOVING_PIECES = false
+SCENE_RETURN_INPUT_BUFFER = 1
