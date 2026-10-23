@@ -6,8 +6,10 @@ function game_boardSquare:update(dt)
 	
 	if not self:isAssocBlockNil() then
 		self.assoc_block:update(dt)
-		if not self.assoc_block:isPieceBelow() then
-			self.assoc_block.is_falling = true
+		if not self:isAssocBlockNil() then
+			if not self.assoc_block:isPieceBelow() then
+				self.assoc_block.is_falling = true
+			end
 		end
 	else
 		return
