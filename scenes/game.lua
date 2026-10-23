@@ -55,16 +55,18 @@ function scene.update(dt)
 	--everything below shouldn't update before scoring animations finish
 	-- NEED TO GET RELIABLE LOSE CONDITION CHECKER!!!
 	game_board:update(dt)
-	-- game_board:matchBlocks()
+	if game_board:checkLoseCondition() then
+		game_end = true
+	end
 	
 	if EXPUNGE_BOARD_BLOCKS then
 		block_board:toExpungeBlocks(dt)
 	end
 	block_board:update(dt)
 	block_board:topUp()
-	
 	for i,p in pairs(players) do
 		p:update(dt)
+		block_board:changeExpungeWait(p.score)
 	end
 	
 	:: exit ::
@@ -83,7 +85,7 @@ function scene.draw()
 	block_board:draw()
 	love.graphics.setColor(1,1,1)
 	local time_to_expunge = math.floor(block_board.expunge_time + 0.5)
-	love.graphics.print(time_to_expunge, block_board.x, block_board.y - 50)
+	love.graphics.print(time_to_expunge.."/"..block_board.expunge_wait, block_board.x, block_board.y - 50)
 	
 	for i,p in pairs(players) do
 		--draw plyaer cursor
@@ -96,7 +98,7 @@ function scene.draw()
 	love.graphics.print("Combo Time: "..players[1].combo_time, 0, 150)
 	love.graphics.print(delta_time, 0, 0)
 	if game_end then
-		love.graphics.print("GAME OVER", love.graphics.getWidth(), 0)
+		love.graphics.print("GAME OVER", love.graphics.getWidth()/2, 0)
 	end
 end
 

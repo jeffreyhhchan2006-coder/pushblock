@@ -135,12 +135,14 @@ function block:update(dt)
 		print("scored block time: "..self.time)
 		print("scored block score time + duration:"..self.score_time + self.score_duration)
 		if self.time > (self.score_time + self.score_duration) then
-			print("delete scored block")
 			-- remove block
+			print("delete scored block")
 			self.assoc_square:removeBlock(self.player)
-			-- shift column 1 square to the right
-			print("scored_block coords: "..self.assoc_square.gridx..", "..self.assoc_square.gridy)
-			game_board:shiftRowAfterSquare(self.assoc_square.gridx,self.assoc_square.gridy)
+			if SHIFT_BLOCKS_AFTER_SCORE then
+				-- shift column 1 square to the right
+				print("scored_block coords: "..self.assoc_square.gridx..", "..self.assoc_square.gridy)
+				game_board:shiftRowAfterSquare(self.assoc_square.gridx,self.assoc_square.gridy)
+			end
 		end
 		return
 	end

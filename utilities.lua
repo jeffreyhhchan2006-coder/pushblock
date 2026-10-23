@@ -1,5 +1,5 @@
 function getRandomType()
-	return math.floor(math.random()*6 - 0.1) + 1
+	return math.floor(math.random()*NUMBER_OF_TYPES - 0.1) + 1
 end
 
 function flipDirection(direction)

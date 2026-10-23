@@ -88,6 +88,7 @@ end
 
 function player:addScore(val)
 	self.score = self.score + val*self.combo
+	self.assoc_board:changeExpungeWait(self.score)
 end
 
 function player:setCombo()
