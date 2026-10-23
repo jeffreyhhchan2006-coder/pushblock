@@ -64,6 +64,8 @@ function scene.update(dt)
 	end
 	block_board:update(dt)
 	block_board:topUp()
+	block_board:updateExpungeCooldown(dt)
+	
 	for i,p in pairs(players) do
 		p:update(dt)
 		block_board:changeExpungeWait(p.score)

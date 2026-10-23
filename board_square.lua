@@ -32,7 +32,7 @@ function boardSquare:setBlock(type, player, is_loopback)
 	print("setting block")
 	player = player or 0
 	is_loopback = is_loopback or false
-	self.assoc_block = block:new({x = self.x, y = self.y, assoc_square = self, type = type, player = player, is_loopback = is_loopback})
+	self.assoc_block = block:new({x = self.x, y = self.y, assoc_square = self, type = type, player = player, is_falling = true, is_loopback = is_loopback})
 	print("set block of type "..type.." on "..self.gridx..", "..self.gridy)
 end
 

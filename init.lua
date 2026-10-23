@@ -57,12 +57,16 @@ function load_board()
 			refresh_time = 0,
 			refresh_wait = 3,
 			expunge_time = 30, 
-			expunge_min = 5,
+			expunge_min = 3,
+			expunge_mid = 10,
 			expunge_max = 30,
 			expunge_wait = 30,
 			expunge_wait_change = 2,
+			expunge_cooldown_time = 0, --to prevent player from expunging multiple time consecutively accidentally
+			expunge_cooldown_duration = 0.25,
 			score_before_expunge_change = 500,
-			score_mult = 5
+			score_add = 500,
+			score_mult = 2
 		}, 
 		boardSquare
 	)

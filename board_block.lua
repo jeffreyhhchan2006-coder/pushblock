@@ -6,6 +6,7 @@ block = object:new({
 	colour = {1,1,1,1}, --this for white,
 	--booleans
 	is_scored = false, --if block is scored, disable it?
+	is_falling = false,
 	is_selected = false,
 	is_loopback = false,
 	--shift block variables
@@ -94,6 +95,9 @@ function block:isPieceBelow()
 	local gravity = board.gravity
 	local belowX = self.assoc_square.gridx + gravity[1]
 	local belowY = self.assoc_square.gridy + gravity[2]
+	if outsideBoardBounds(board, belowX, belowY) then
+		return true
+	end
 	if not board.contents[belowY][belowX]:isAssocBlockNil() then
 		return true
 	end

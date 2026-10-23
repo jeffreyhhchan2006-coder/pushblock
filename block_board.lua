@@ -12,6 +12,10 @@ block_board = grid:new(
 		expunge_wait = 0,
 		expunge_wait_change = 0,
 		score_before_expunge_change = 0,
+		expunge_cooldown_time = 0, --to prevent player from expunging multiple time consecutively accidentally
+		expunge_cooldown_duration = 3,
+		score_before_expunge_change = 0,
+		score_add = 0,
 		score_mult = 0
 	}, 
 	boardSquare
@@ -49,6 +53,7 @@ function block_board:refresh()
 end
 
 function block_board:ExpungeBlocks()
+	if self.expunge_cooldown_time > 0 then return end
 	for i=1,#self.contents do
 		if self.assoc_game_board.contents[i][1]:isAssocBlockNil() then
 			self.contents[i][1]:pushBlock(1, self.assoc_game_board)
@@ -56,6 +61,7 @@ function block_board:ExpungeBlocks()
 	end
 	self:setBlocks()
 	self.expunge_time = self.expunge_wait
+	self.expunge_cooldown_time = self.expunge_cooldown_duration
 end
 
 function block_board:toExpungeBlocks(dt)
@@ -70,6 +76,15 @@ function block_board:changeExpungeWait(score)
 	if self.expunge_wait <= self.expunge_min then return end
 	if score >= self.score_before_expunge_change then
 		self.expunge_wait = self.expunge_wait - self.expunge_wait_change
-		self.score_before_expunge_change = self.score_before_expunge_change * self.score_mult
+		if self.expunge_wait > self.expunge_mid then
+			self.score_add = self.score_add * self.score_mult
+		end
+		self.score_before_expunge_change = self.score_before_expunge_change + self.score_add
+	end
+end
+
+function block_board:updateExpungeCooldown(dt)
+	if self.expunge_cooldown_time > 0 then
+		self.expunge_cooldown_time = self.expunge_cooldown_time - dt
 	end
 end

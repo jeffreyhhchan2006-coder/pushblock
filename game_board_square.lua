@@ -6,12 +6,14 @@ function game_boardSquare:update(dt)
 	
 	if not self:isAssocBlockNil() then
 		self.assoc_block:update(dt)
+		if not self.assoc_block:isPieceBelow() then
+			self.assoc_block.is_falling = true
+		end
 	else
 		return
 	end
-	
 	--this should just run once?
-	if self.gridx <= self.grid.player_area then --if not floor, move block
+	if self.assoc_block.is_falling then --if not floor, move block
 		self:moveBlock(self.grid.gravity, false) --move blocks vertically if have space
 	end
 end
@@ -130,12 +132,14 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	if (newX > self.grid.player_area and is_stop_at_player_area) then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved outside of player area to "..newX..", "..newY)
 		self:matchBlocks() --not here, either put it somewhere else, or make matchBlocks for a singular block only
+		self.assoc_block.is_falling = false
 		return
 	end
 	--check if block has another block below them
 	if self.assoc_block:isPieceBelow() then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved onto another block")
 		self:matchBlocks()
+		self.assoc_block.is_falling = false
 		return
 	end
 	
