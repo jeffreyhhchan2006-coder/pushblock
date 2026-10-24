@@ -29,9 +29,10 @@ function love.load()
 	-- love.profiler = require('libraries/lag_profiling/profile') 
 	-- love.profiler.start()
 	love.window.setFullscreen(true, "desktop")
+	love.graphics.setDefaultFilter("nearest")
 	player_colors = {changeColorBrightness({68/255, 238/255, 201/255, 1},-0.1),changeColorBrightness({238/255, 66/255, 102/255, 1},-0.1)}
 	delta_time = 0
-	SSM.add("game")
+	SSM.add("start")
 end
 
 function love.keypressed(key, scancode, isrepeat )

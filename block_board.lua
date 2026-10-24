@@ -11,7 +11,6 @@ block_board = grid:new(
 		expunge_max = 0,
 		expunge_wait = 0,
 		expunge_wait_change = 0,
-		score_before_expunge_change = 0,
 		expunge_cooldown_time = 0, --to prevent player from expunging multiple time consecutively accidentally
 		expunge_cooldown_duration = 3,
 		score_before_expunge_change = 0,

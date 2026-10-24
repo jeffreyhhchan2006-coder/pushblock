@@ -39,8 +39,8 @@ block = object:new({
 		love.graphics.rectangle( "line", self.x+margin, self.y+margin, square.size - 2*margin, square.size - 2*margin) 
 		
 		--print shift block value
-		love.graphics.setColor({0,0,0,1})
-		love.graphics.print( self.shift_block, self.x+margin, self.y+margin)
+		love.graphics.setColor(changeColorBrightness(self.colour, -0.5))
+		love.graphics.print( self.type, self.x+margin*2, self.y+margin*2)
 	end
 })
 

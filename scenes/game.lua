@@ -75,7 +75,8 @@ function scene.update(dt)
 end
 
 function scene.draw()
-	--print('game draw')
+
+	drawBackground()
 	
 	--shading the baord background
 	love.graphics.setColor(0,0,0,0.75)
@@ -98,6 +99,7 @@ function scene.draw()
 	love.graphics.print("Score: "..players[1].score, 0, 100)
 	love.graphics.print("Combo: "..players[1].combo-1, 0, 125)
 	love.graphics.print("Combo Time: "..players[1].combo_time, 0, 150)
+	love.graphics.print("Next Goal: "..block_board.score_before_expunge_change, 0, 200)
 	love.graphics.print(delta_time, 0, 0)
 	if game_end then
 		love.graphics.print("GAME OVER", love.graphics.getWidth()/2, 0)

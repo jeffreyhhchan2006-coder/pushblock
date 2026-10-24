@@ -4,6 +4,7 @@ player = object:new({ --crash after transition to spell_menu
 	gridx = 1,
 	gridy = 1, --index by 1 since tables are also
 	player = 1,
+	colour = {1,1,1},
 	--scoring
 	score = 0,
 	combo = 1,
@@ -48,10 +49,12 @@ function player:draw(size) --only draws the cursor
 	-- elseif self.player == 2 then
 		-- love.graphics.setColor(1,0,0)
 	-- end
-	love.graphics.setColor(player_colors[self.player])
+	love.graphics.setColor(self.colour)
 	local cursor_size = size * 0.9
 	local cursor_margin = (size - cursor_size)/2
+	love.graphics.setLineWidth(5)
 	love.graphics.rectangle("line", self.x + cursor_margin, self.y + cursor_margin, cursor_size, cursor_size)
+	love.graphics.setLineWidth(1)
 	
 	
 	--draw a right angled triangle instead, player 1 on top left, player 2 on bottom right
@@ -61,12 +64,16 @@ function player:draw(size) --only draws the cursor
 	love.graphics.setColor(self.selected_block.colour)
 	
 	if self.player == 1 then
-		love.graphics.polygon(
-			"fill", 
-			self.x + cursor_margin + triangle_length,self.y + cursor_margin, 
-			self.x + cursor_margin + triangle_length,self.y + cursor_margin + triangle_length, 
-			self.x + cursor_margin,self.y + cursor_margin + triangle_length
-		)
+		love.graphics.rectangle("fill", self.x + cursor_margin, self.y + cursor_margin, triangle_length, triangle_length)
+		love.graphics.setColor({0,0,0})
+		love.graphics.rectangle("line", self.x + cursor_margin, self.y + cursor_margin, triangle_length, triangle_length)
+		-- love.graphics.polygon(
+			-- "fill", 
+			-- self.x,self.y,
+			-- self.x + cursor_margin + triangle_length,self.y + cursor_margin, 
+			-- self.x + cursor_margin + triangle_length,self.y + cursor_margin + triangle_length, 
+			-- self.x + cursor_margin,self.y + cursor_margin + triangle_length
+		-- )
 	else
 		love.graphics.polygon(
 			"fill", 
@@ -223,6 +230,9 @@ function player:update(dt)
 	self:controls_read(self.control_map,board,dt)
 	self:controls_update(self.control_map,board,dt)
 	
+	if self.assoc_board.expunge_time <= 0 then
+		self.selected_block = {}
+	end
 	-- if next(self.selected_block) ~= nil then
 		-- local sbsquare = self.selected_block.assoc_square
 		-- print("selected block coords: "..sbsquare.gridx..", "..sbsquare.gridy)

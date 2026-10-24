@@ -1,12 +1,12 @@
 MVP:
 	Game:
-		- Make reliable lose condition
+		- Make reliable lose condition (DONE)
 		- Add animations to scoring
 			- Freeze player actions and expunge timer until scoring is finished
-				- Use combo timer for unfreezing player actions and expunge timer
-			- Add block animations to when they are scored
-				- Freeze game board when animation is not finished
-				- After block animation is finished, unfreeze game board
+				- Use combo timer for unfreezing player actions and expunge timer (DONE)
+			- Add block animations to when they are scored (DONE)
+				- Freeze game board when animation is not finished (DONE)
+				- After block animation is finished, unfreeze game board (DONE)
 			- Add tiny popups for scoring
 				- Total score from pieces
 				- Combo multiplier
@@ -20,7 +20,7 @@ MVP:
 	High Score:
 		- Add screen showing high scores
 	Graphics:
-		- Add font
+		- Add font (DONE?)
 		- Make blocks look nicer
 			- Add symbols for colorblind players
 			- Make shift block number on block look nicer
