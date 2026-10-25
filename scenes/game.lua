@@ -19,7 +19,7 @@ function scene.load()
 	game_board_update_time = 0
 	game_end = false
 	timer_before_transition = 0
-	duration_before_transition = 1
+	duration_before_transition = 3
 	is_transition = false
 	--end screen test
 	-- players[1].influence = 2500
@@ -28,6 +28,7 @@ function scene.load()
 	math.randomseed(os.time())
 	block_board:setBlocks()
 	delta_time = 0
+	game_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/30)
 end
 
 function love.keypressed(key, scancode, isrepeat )
@@ -42,6 +43,19 @@ end
 function scene.update(dt)
 	time = time + dt
 	delta_time = dt
+	
+	if game_end then
+		timer_before_transition = timer_before_transition + dt
+		if timer_before_transition >= duration_before_transition and not is_transition then
+			saveGame(players[1].score, players[1].max_combo)
+			TM.load(
+				"fade-in-out",                       
+				SSM.add,                          
+				'results'
+			)
+			is_transition = true
+		end
+	end
 	
 	if next(blocks_scored_to_be_animated) ~= nil then
 		updateScoredBlocks(dt,game_board)
@@ -81,7 +95,7 @@ end
 function scene.draw()
 
 	drawBackground()
-	
+	love.graphics.setFont(game_font)
 	--shading the baord background
 	love.graphics.setColor(0,0,0,0.75)
 	love.graphics.rectangle("fill", game_board.x, game_board.y, game_board.size, game_board.size)
@@ -91,6 +105,7 @@ function scene.draw()
 	game_board:draw()
 	block_board:draw()
 	love.graphics.setColor(1,1,1)
+	love.graphics.setFont(game_font)
 	local time_to_expunge = math.floor(block_board.expunge_time + 0.5)
 	love.graphics.print(time_to_expunge.."/"..block_board.expunge_wait, block_board.x, block_board.y - 50)
 	
@@ -101,12 +116,20 @@ function scene.draw()
 	
 	local text_margin = 10
 	love.graphics.setColor(1,1,1)
+	love.graphics.setFont(game_font)
 	love.graphics.print("Score: "..players[1].score, text_margin, 100)
 	love.graphics.print("Target: "..block_board.score_before_expunge_change, text_margin, 125)
 	love.graphics.print("Blocks Scored: "..players[1].blocks_scored, text_margin, 150)
 	love.graphics.print(delta_time, 0, 0)
+	
 	if game_end then
-		love.graphics.print("GAME OVER", love.graphics.getWidth()/2, 0)
+		love.graphics.setColor(0,0,0,timer_before_transition)
+		love.graphics.rectangle("fill", 0,0, love.graphics.getWidth(), love.graphics.getHeight())
+		love.graphics.setColor(1,1,1)
+		local font = love.graphics.newFont("fonts/PixelCards.ttf", love.graphics.getHeight()/10)
+		love.graphics.setFont(font)
+		local text = "GAME OVER"
+		love.graphics.print(text,love.graphics.getWidth()/2 - font:getWidth(text)/2,love.graphics.getHeight()/2 - font:getHeight()/2)
 	end
 end
 

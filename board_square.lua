@@ -1,6 +1,9 @@
 require "grid"
 require "board_block"
 
+game_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/30)
+big_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/15)
+
 boardSquare = gridSquare:new({
 	grid = {},
 	assoc_block = {}, --for block block
@@ -9,8 +12,16 @@ boardSquare = gridSquare:new({
 	draw = function (self) --doesn't draw
 		love.graphics.setColor(1,1,1)
 		love.graphics.rectangle("line", self.x, self.y, self.size, self.size)
+		
+		love.graphics.setFont(game_font)
 		if next(self.assoc_block) ~= nil then 
 			self.assoc_block:draw(self)
+		end
+		
+		love.graphics.setFont(big_font)
+		if self:isBlocked() then
+			love.graphics.setColor(1,0,0)
+			love.graphics.print("!", self.x - self.size/2, self.y)
 		end
 	end
 })
@@ -26,6 +37,16 @@ end
 function boardSquare:isAssocBlockNil()
 	if next(self.assoc_block) == nil or self.assoc_block == nil then return true end
 	return false
+end
+
+function boardSquare:isBlocked()
+	local game_board = self.grid.assoc_game_board
+	for i=1,game_board.rows do
+		if game_board.contents[self.gridy][i]:isAssocBlockNil() then 
+			return false 
+		end
+	end
+	return true
 end
 
 function boardSquare:setBlock(type, player, is_loopback)

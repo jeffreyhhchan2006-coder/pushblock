@@ -1,10 +1,14 @@
 require "init"
+require "save_load"
 
 local scene = {}
 
 function scene.load()
 	logo = love.graphics.newImage("assets/images/logo.png")
 	time = 0
+	initSaveData()
+	loadGame() --get data
+	print("High score: "..data.score_board[1])
 end
 
 
@@ -58,6 +62,14 @@ function scene.draw()
 		love.graphics.getWidth()*7/16,
 		love.graphics.getHeight()*15/32
 	)
+	love.graphics.setColor(0.15,0.15,0.15)
+	love.graphics.print("Score Board:",love.graphics.getWidth()*3/32,love.graphics.getHeight()*7/16)
+	for i=1,5 do
+		love.graphics.print("	"..i..": "..data.score_board[i],love.graphics.getWidth()*3/32,love.graphics.getHeight()*((14+i)/32))
+	end
+	if next(data.user_score_board) ~= nil then
+		love.graphics.print("Personal Best: "..data.user_score_board[1],love.graphics.getWidth()*3/32,love.graphics.getHeight()*20/32)
+	end
 	
 	--how to play
 	love.graphics.setColor(0.75,0.75,0.75)

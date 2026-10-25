@@ -5,7 +5,7 @@ local transition = {}
 -- Initalize local transition variables here
 local time = 0
 local transition_transparency = 0
-local transition_transparency_rate = 8
+local transition_transparency_rate = 6
 --strings of file paths of scenes in the scenes folder
 local current_scene = SSM.current
 local next_scene = TM.params
