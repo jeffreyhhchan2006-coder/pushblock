@@ -73,6 +73,7 @@ function boardSquare:pushBlock(player, game_board)
 	end 
 	game_board.contents[self.gridy][1]:setBlock(self.assoc_block.type, player)
 	self:removeBlock(player)
+	playSFX(push_sfx)
 	print("player "..player.." push block on row "..self.gridy)
 end
 

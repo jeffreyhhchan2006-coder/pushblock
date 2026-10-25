@@ -5,6 +5,7 @@ require "game_board"
 require "block_board"
 require "backgrounds"
 
+
 function load_players()
 	table.insert(players, player:new({player = 1, assoc_board = block_board, assoc_game_board = game_board}))
 	--No multiplayer for now
@@ -73,5 +74,3 @@ function load_board()
 	)
 
 end
-
-

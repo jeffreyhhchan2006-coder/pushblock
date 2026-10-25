@@ -1,12 +1,12 @@
 require "settings"
 require "utilities"
+require "load_sound"
 
 SSM = require "libraries/scene_libraries/StackingSceneMgr/lib.StackingSceneMgr".newManager()
 SSM.setPath("scenes/")
 
 TM = require "libraries/scene_libraries/TransitionMgr/lib.TransitionMgr".newManager()
 TM.setPath("transitions/")
-
 
 --Main: (order intended)
 	-- load
@@ -31,6 +31,8 @@ function love.load()
 	love.window.setFullscreen(true, "desktop")
 	love.graphics.setDefaultFilter("nearest")
 	player_colors = {changeColorBrightness({68/255, 238/255, 201/255, 1},-0.1),changeColorBrightness({238/255, 66/255, 102/255, 1},-0.1)}
+	load_music()
+	load_sound()
 	delta_time = 0
 	SSM.add("start")
 end

@@ -15,6 +15,7 @@ end
 function scene.update(dt)
 	time = time + dt
 	bg_blocks = {}
+	playLoopMusic(title_music)
 	if love.keyboard.isDown("escape") then
 		love.event.quit()
 	elseif love.keyboard.isDown("return") then

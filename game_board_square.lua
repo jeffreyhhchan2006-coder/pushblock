@@ -1,4 +1,5 @@
 require "board_square"
+require "score_popup"
 --game board
 game_boardSquare = boardSquare:new()
 function game_boardSquare:update(dt)
@@ -105,9 +106,10 @@ function game_boardSquare:matchBlocks()
 			scored_block:setBlockToScore(playerID)
 		end
 		print("TOTAL SCORE (without counting combos): "..total_score)
-		players[playerID]:setCombo()
 		players[playerID].blocks_scored = players[playerID].blocks_scored + #scoring_blocks
 		blocks_scored_to_be_animated = scoring_blocks
+		addScorePopup(self.x + self.size/2,self.y + self.size/2,total_score,players[playerID].combo)
+		players[playerID]:setCombo()
 		--remove blocks from board, shift the rows they occupy, then score the blocks
 		return --once something is scored don't score anymore since no updates this time
 	end

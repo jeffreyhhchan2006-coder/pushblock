@@ -58,6 +58,7 @@ function block_board:ExpungeBlocks()
 			self.contents[i][1]:pushBlock(1, self.assoc_game_board)
 		end
 	end
+	playSFX(expunge_sfx)
 	self:setBlocks()
 	self.expunge_time = self.expunge_wait
 	self.expunge_cooldown_time = self.expunge_cooldown_duration

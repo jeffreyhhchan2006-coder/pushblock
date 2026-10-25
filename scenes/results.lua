@@ -26,6 +26,7 @@ function scene.update(dt)
 		end
 		if score_to_show < players[1].score then
 			score_to_show = score_to_show + 1
+			playSFX(move_sfx)
 		else
 			results_state = "tally_max_combo"
 		end
@@ -35,6 +36,7 @@ function scene.update(dt)
 		end
 		if max_combo_to_show < players[1].max_combo then
 			max_combo_to_show = max_combo_to_show + 1
+			playSFX(move_sfx)
 		else
 			results_state = "continue"
 		end

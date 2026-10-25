@@ -11,7 +11,7 @@ player = object:new({ --crash after transition to spell_menu
 	combo = 1,
 	max_combo = 0,
 	combo_time = 0,
-	combo_time_limit = 0.5,
+	combo_time_limit = 1,
 	--controls
 	cooldown_time = 0.06,
 	input_delay = 0.04,
@@ -89,9 +89,11 @@ end
 function player:move(board,x,y) --reuse for menu control
 	if (self.gridx > 1 and x < 0) or (self.gridx < board.rows and x > 0) then
 		self.gridx = self.gridx + x
+		playSFX(move_sfx)
 	end
 	if (self.gridy > 1 and y < 0) or (self.gridy < board.columns and y > 0) then
 		self.gridy = self.gridy + y
+		playSFX(move_sfx)
 	end
 end
 

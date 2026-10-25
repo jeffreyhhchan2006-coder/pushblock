@@ -20,6 +20,7 @@ function initSaveData()
 	table.insert(data.score_board, 625)
 	
 	data.max_combo = 0
+	data.total_blocks_pushed = 0
 	serialized = lume.serialize(data)
 	--create new file
 	love.filesystem.newFile(save_data_location, "w")
