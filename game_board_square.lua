@@ -41,6 +41,15 @@ function game_boardSquare:matchBlocks()
 	
 	--finding connected blocks part
 	local scoring_blocks = square.assoc_block:findDirectOppositeBlocks() --start of loop
+	
+	--ensure no blocks are scored falling
+	for j,block1 in pairs(scoring_blocks) do
+		if block1.is_falling then
+			table.remove(scoring_blocks,j)
+			j = j - 1
+		end
+	end
+	
 	if #scoring_blocks > 0 then
 		--print("found matching blocks to score for block "..square.gridx..", "..square.gridy)
 		for i,scored_block in pairs(scoring_blocks) do
@@ -53,7 +62,8 @@ function game_boardSquare:matchBlocks()
 			if next(found_list) ~= nil then 
 				for i,block1 in pairs(scoring_blocks) do
 					for j,block2 in pairs(found_list) do
-						if block1.assoc_square.gridx == block2.assoc_square.gridx and block1.assoc_square.gridy == block2.assoc_square.gridy then
+						--check if the block is same and if block2 is also falling
+						if (block1.assoc_square.gridx == block2.assoc_square.gridx and block1.assoc_square.gridy == block2.assoc_square.gridy) or block2.is_falling then
 							table.remove(found_list,j)
 							j = j - 1
 						end
@@ -130,7 +140,7 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	local newX, newY = self.gridx + direction[1], self.gridy + direction[2]
 	if outsideBoardBounds(self.grid, newX, newY) then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved outside of bounds to "..newX..", "..newY)
-		
+		self.assoc_block.is_falling = false
 		if SHIFT_BLOCKS_AFTER_SCORE then
 			print("Get block back to the top")
 			self.grid.contents[self.gridy][1]:setBlock(self.assoc_block.type, 1)
@@ -145,15 +155,15 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	--check if block would go under the ground when its not supposed to
 	if (newX > self.grid.player_area and is_stop_at_player_area) then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved outside of player area to "..newX..", "..newY)
-		self:matchBlocks() --not here, either put it somewhere else, or make matchBlocks for a singular block only
 		self.assoc_block.is_falling = false
+		self:matchBlocks() --not here, either put it somewhere else, or make matchBlocks for a singular block only
 		return
 	end
 	--check if block has another block below them
 	if self.assoc_block:isPieceBelow() then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved onto another block")
-		self:matchBlocks()
 		self.assoc_block.is_falling = false
+		self:matchBlocks()
 		return
 	end
 	
