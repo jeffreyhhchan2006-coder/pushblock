@@ -34,6 +34,19 @@ function game_board:checkLoseCondition()
 	return is_lose
 end
 
+function game_board:checkGameCondition()
+	local how_much_filled = 0
+	for y=1,self.columns do
+		for x=self.rows,1,-1 do
+			--check lose condition
+			if not self.contents[y][x]:isAssocBlockNil() then
+				how_much_filled = how_much_filled + 1
+			end
+		end
+	end
+	return how_much_filled / (self.player_area * self.columns)
+end
+
 --game board functions
 function game_board:shiftRowAfterSquare(x,y) --shift row forwards
 	print("-----START OF SHIFT ROW-----")

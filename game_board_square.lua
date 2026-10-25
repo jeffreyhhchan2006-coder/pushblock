@@ -33,6 +33,7 @@ function game_boardSquare:draw() --doesn't draw
 end
 
 function game_boardSquare:matchBlocks()
+	print("Now scoring blocks")
 	local square = self
 	if next(square.assoc_block) == nil then goto continue end
 	local playerID = square.assoc_block.player
@@ -95,6 +96,7 @@ function game_boardSquare:matchBlocks()
 		end
 		print("TOTAL SCORE (without counting combos): "..total_score)
 		players[playerID]:setCombo()
+		players[playerID].blocks_scored = players[playerID].blocks_scored + #scoring_blocks
 		blocks_scored_to_be_animated = scoring_blocks
 		--remove blocks from board, shift the rows they occupy, then score the blocks
 		return --once something is scored don't score anymore since no updates this time
@@ -103,13 +105,23 @@ function game_boardSquare:matchBlocks()
 end
 
 function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
+	
 	if is_stop_at_player_area == nil then
 		is_stop_at_player_area = true
 	end
-	local ooB = false
+
 	if self:isAssocBlockNil() then 
 		return 
 	end
+	
+	if self.assoc_block.is_scored then
+		return
+	end
+	
+	if not self.assoc_block.is_falling then
+		return
+	end
+	
 	if is_stop_at_player_area then 
 		print("Block "..self.gridx.. ","..self.gridy.." would stop at player area: "..self.grid.player_area) 
 	end

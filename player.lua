@@ -7,7 +7,9 @@ player = object:new({ --crash after transition to spell_menu
 	colour = {1,1,1},
 	--scoring
 	score = 0,
+	blocks_scored = 0,
 	combo = 1,
+	max_combo = 0,
 	combo_time = 0,
 	combo_time_limit = 0.5,
 	--controls
@@ -105,6 +107,9 @@ end
 
 function player:updateCombo(dt)
 	if self.combo_time <= 0 then
+		if self.combo > self.max_combo then
+			self.max_combo = self.combo
+		end
 		self.combo = 1
 	else
 		self.combo_time = self.combo_time - dt
