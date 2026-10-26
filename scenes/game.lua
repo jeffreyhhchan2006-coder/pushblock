@@ -180,7 +180,10 @@ function scene.draw()
 	love.graphics.print("Score: "..players[1].score, text_margin, 100)
 	love.graphics.print("Target: "..block_board.score_before_expunge_change, text_margin, 125)
 	love.graphics.print("Blocks Scored: "..players[1].blocks_scored, text_margin, 150)
-	love.graphics.print(delta_time, 0, 0)
+	--love.graphics.print(delta_time, 0, 0)
+	
+	love.graphics.print("W/S: Move Up/Down,\nJ: Push Block,\nK: Select/Switch Blocks, \nSpace: Expunge Blocks", text_margin, 650)
+	
 	
 	--Game Over Screen
 	if game_end then
