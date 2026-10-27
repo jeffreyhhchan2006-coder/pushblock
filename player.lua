@@ -11,7 +11,7 @@ player = object:new({ --crash after transition to spell_menu
 	combo = 1,
 	max_combo = 0,
 	combo_time = 0,
-	combo_time_limit = 1,
+	combo_time_limit = 0.1,
 	--controls
 	cooldown_time = 0.06,
 	input_delay = 0.04,

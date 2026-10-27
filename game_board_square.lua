@@ -84,7 +84,17 @@ function game_boardSquare:matchBlocks()
 			if scored_block.is_loopback then
 				is_loopback = true
 			end
+			
 			--print("blocks added to scoring_blocks: ".. #scoring_blocks-old_scoring_blocks_num)
+		end
+	end
+	
+	--check game_board scored blocks, interrim blocks are not scored. Maybe because I'm only reading unscored blocks? I could just check whether is_scored is true...
+	--I think this works???
+	for i,b in pairs(scoring_blocks) do
+		if b.is_scored then
+			table.remove(scoring_blocks,i)
+			i = i - 1
 		end
 	end
 	
@@ -105,10 +115,13 @@ function game_boardSquare:matchBlocks()
 			--set block to score animate
 			scored_block:setBlockToScore(playerID)
 		end
+		--calculate score
 		print("TOTAL SCORE (without counting combos): "..total_score)
 		players[playerID].blocks_scored = players[playerID].blocks_scored + #scoring_blocks
+		--add blocks to be scored
 		blocks_scored_to_be_animated = scoring_blocks
 		addScorePopup(self.x + self.size/2,self.y + self.size/2,total_score,players[playerID].combo)
+		--set combo
 		players[playerID]:setCombo()
 		--remove blocks from board, shift the rows they occupy, then score the blocks
 		return --once something is scored don't score anymore since no updates this time
@@ -150,6 +163,7 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 			self:removeBlock(0)
 		else
 			self:matchBlocks()
+			-- self:matchBlocks()
 		end
 		
 		return

@@ -4,7 +4,7 @@ require "game_board_square"
 game_board = grid:new(
 	{
 		gravity = {1,0},
-		player_area = 8 --x value
+		player_area = 8		--x value
 	}, 
 	game_boardSquare --seperate square needed?
 )

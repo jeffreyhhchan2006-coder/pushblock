@@ -31,6 +31,8 @@ function scene.load()
 	delta_time = 0
 	game_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/30)
 	intro_music_played = false
+	board_filled_timer = 0
+	duration_before_game_over = 0.5
 end
 
 function love.keypressed(key, scancode, isrepeat )
@@ -115,13 +117,8 @@ function scene.update(dt)
 	end
 	
 	updateScorePopups(dt)
-	
-	-- if next(blocks_scored_to_be_animated) ~= nil then
-		-- print("game update continues despite return")
-	-- end
 
 	--everything below shouldn't update before scoring animations finish
-	-- NEED TO GET RELIABLE LOSE CONDITION CHECKER!!!
 	game_board:update(dt)
 	
 	if EXPUNGE_BOARD_BLOCKS then
@@ -134,14 +131,16 @@ function scene.update(dt)
 	for i,p in pairs(players) do
 		p:update(dt)
 		block_board:changeExpungeWait(p.score)
-		if p.combo_time <= 0 then
-			if game_board:checkLoseCondition() then
-				game_end = true
-			end
-		end
 	end
 	
-	
+	if game_board:checkGameCondition() >= 1 then
+		board_filled_timer = board_filled_timer + dt
+		if board_filled_timer > duration_before_game_over then
+				game_end = true
+		end
+	else
+		board_filled_timer = 0
+	end
 	
 	:: exit ::
 end

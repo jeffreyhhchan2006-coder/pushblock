@@ -7,6 +7,8 @@ function scene.load()
 	start_scoring = 0.5
 	score_to_show = 0
 	max_combo_to_show = 0
+	sfx_time = 0
+	sfx_gap = 1/30
 	results_state = "load"
 	print(players[1].score)
 	print(players[1].max_combo)
@@ -20,23 +22,36 @@ function scene.update(dt)
 		results_state = "tally_score"
 	end
 	
-	if results_state == "tally_score" then
+	local function tally(tally_count,tally_target)
 		if love.keyboard.isDown("j") then
-			score_to_show = players[1].score
+			tally_count = tally_target
 		end
-		if score_to_show < players[1].score then
-			score_to_show = score_to_show + 1
+		if tally_count < tally_target then
+			tally_count = tally_count + 1
+		end
+		return tally_count
+	end
+	
+	local function playSpacedSFX(sfx)
+		if sfx_time <= 0 then 
 			playSFX(move_sfx)
+			sfx_time = sfx_gap
+		else
+			sfx_time = sfx_time - dt
+		end
+	end
+	
+	if results_state == "tally_score" then
+		if score_to_show < players[1].score then
+			score_to_show = tally(score_to_show,players[1].score)
+			playSpacedSFX(move_sfx)
 		else
 			results_state = "tally_max_combo"
 		end
 	elseif results_state == "tally_max_combo" then
-		if love.keyboard.isDown("j") then
-			max_combo_to_show = players[1].max_combo
-		end
 		if max_combo_to_show < players[1].max_combo then
-			max_combo_to_show = max_combo_to_show + 1
-			playSFX(move_sfx)
+			max_combo_to_show = tally(max_combo_to_show,players[1].max_combo)
+			playSpacedSFX(move_sfx)
 		else
 			results_state = "continue"
 		end
