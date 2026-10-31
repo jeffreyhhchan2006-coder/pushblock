@@ -1,3 +1,15 @@
+color_palettes = {
+	blocks = {
+		{205/255, 22/255, 255/255}, --purple
+		{255/255, 248/255, 40/255}, --yellow
+		{255/255, 40/255, 130/255}, --red
+		{40/255, 129/255, 255/255}, --blue
+		{255/255, 87/255, 35/255}, --orange
+		{57/255, 255/255, 67/255} --green
+	}
+}
+
+
 function getRandomType()
 	return math.floor(math.random()*NUMBER_OF_TYPES - 0.1) + 1
 end

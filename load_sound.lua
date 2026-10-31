@@ -1,11 +1,13 @@
 masterVolume = 0.5 -- Maximum volume for all sounds
-sfxVolume = 1
+sfxVolume = 0.5
 musicVolume = 0.5
 
 function load_sound()
 	expunge_sfx = love.audio.newSource("assets/audio/sfx/A01.wav", "static")
 	push_sfx = love.audio.newSource("assets/audio/sfx/A02.wav", "static")
 	move_sfx = love.audio.newSource("assets/audio/sfx/A03.wav", "static")
+	score_sfx = love.audio.newSource("assets/audio/sfx/score.wav", "static")
+	combo_sfx = love.audio.newSource("assets/audio/sfx/combo.wav", "static")
 end
 
 function load_music()
@@ -34,3 +36,9 @@ function playLoopMusic(music)
 		love.audio.play(music)
 	end
 end
+
+function playMusic(music)
+	music:setVolume(masterVolume * musicVolume)
+	love.audio.play(music)
+end
+

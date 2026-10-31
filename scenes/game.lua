@@ -1,7 +1,6 @@
 require "utilities"
-require "objects"
 require "init"
-require "player"
+
 
 
 local scene = {}
@@ -48,6 +47,9 @@ function scene.update(dt)
 	time = time + dt
 	delta_time = dt
 	
+	--rainbow color
+	rainbow_color:update(dt)
+	
 	--music handling
 	local function isAllSilent()
 		local list = {calm_music, good_music, ok_music1, ok_music2, bad_music, very_bad_music}
@@ -74,7 +76,7 @@ function scene.update(dt)
 	
 	if not title_music:isPlaying( ) then
 		if not intro_music_played then
-			love.audio.play(intro_music)
+			playMusic(intro_music)
 			intro_music_played = true
 		else
 			if not intro_music:isPlaying( ) then
@@ -98,7 +100,7 @@ function scene.update(dt)
 	
 	if game_end then
 		stopAllMusic()
-		love.audio.play(game_over_music)
+		playMusic(game_over_music)
 		timer_before_transition = timer_before_transition + dt
 		if timer_before_transition >= duration_before_transition and not is_transition then
 			saveGame(players[1].score, players[1].max_combo)
@@ -119,8 +121,10 @@ function scene.update(dt)
 	updateScorePopups(dt)
 
 	--everything below shouldn't update before scoring animations finish
+	--game board
 	game_board:update(dt)
 	
+	--block board
 	if EXPUNGE_BOARD_BLOCKS then
 		block_board:toExpungeBlocks(dt)
 	end
@@ -128,11 +132,13 @@ function scene.update(dt)
 	block_board:topUp()
 	block_board:updateExpungeCooldown(dt)
 	
+	--players
 	for i,p in pairs(players) do
 		p:update(dt)
 		block_board:changeExpungeWait(p.score)
 	end
 	
+	--game over condition
 	if game_board:checkGameCondition() >= 1 then
 		board_filled_timer = board_filled_timer + dt
 		if board_filled_timer > duration_before_game_over then
@@ -141,6 +147,9 @@ function scene.update(dt)
 	else
 		board_filled_timer = 0
 	end
+	
+	--combo popup
+	updateComboPopup(dt)
 	
 	:: exit ::
 end
@@ -158,6 +167,7 @@ function scene.draw()
 	--love.graphics.rectangle("line", game_board.x, game_board.y, game_board.size, game_board.size)
 	game_board:draw()
 	drawScorePopups(dt)
+	drawComboPopups(dt)
 	
 	--block board
 	block_board:draw()
@@ -179,10 +189,9 @@ function scene.draw()
 	love.graphics.print("Score: "..players[1].score, text_margin, 100)
 	love.graphics.print("Target: "..block_board.score_before_expunge_change, text_margin, 125)
 	love.graphics.print("Blocks Scored: "..players[1].blocks_scored, text_margin, 150)
-	--love.graphics.print(delta_time, 0, 0)
+	--love.graphics.print("Combo Time: "..players[1].combo_time, text_margin, 200)
 	
 	love.graphics.print("W/S: Move Up/Down,\nJ: Push Block,\nK: Select/Switch Blocks, \nSpace: Expunge Blocks", text_margin, 650)
-	
 	
 	--Game Over Screen
 	if game_end then

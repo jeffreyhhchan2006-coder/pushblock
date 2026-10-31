@@ -1,0 +1,4 @@
+- 1st Gameplay impressions
+	- Easy to get out of high piles of blocks, not sure the reason. May need to implement some punishment for overloading a column.
+	- I think there are errors in detecting scoring blocks, especially those that rest atop of another (I think)
+	-

@@ -112,6 +112,9 @@ function player:updateCombo(dt)
 		if self.combo > self.max_combo then
 			self.max_combo = self.combo
 		end
+		if self.combo-1 > 1 then
+			addComboPopup(self.combo)
+		end
 		self.combo = 1
 	else
 		self.combo_time = self.combo_time - dt

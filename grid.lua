@@ -7,7 +7,7 @@ gridSquare = object:new({
 	gridx = 0,
 	gridy = 0,
 	draw = function (self)
-		love.graphics.setColor(1,1,1)
+		love.graphics.setColor(0.7,0.7,0.7)
 		love.graphics.rectangle("line", self.x, self.y, self.size, self.size)
 	end
 })

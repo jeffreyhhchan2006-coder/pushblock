@@ -1,3 +1,5 @@
+require "rainbow_color"
+
 block = object:new({
 
 	--x and y coord for this is kinda useless since it should use assoc_square's coords
@@ -25,7 +27,11 @@ block = object:new({
 	draw = function (self)
 		local square = self.assoc_square
 		local margin = 10
-		love.graphics.setColor(self.colour)
+		if self.type == 0 then
+			love.graphics.setColor(rainbow_color:get())
+		else
+			love.graphics.setColor(self.colour)
+		end
 		
 		if self.is_scored then
 			if self.time % self.blink_interval > (self.blink_interval/2) then
@@ -62,18 +68,8 @@ end
 function block:setColour()
 	--set color based on type
 	--Since there is still white, make white the match with all colours type
-	if self.type == 1 then
-		self.colour = {0,1,1,1} --yellow
-	elseif self.type == 2 then
-		self.colour = {1,0,0,1} --red
-	elseif self.type == 3 then
-		self.colour = {0,1,0,1} --green
-	elseif self.type == 4 then
-		self.colour = {0,0,1,1} --blue
-	elseif self.type == 5 then
-		self.colour = {1,1,0,1} --orange?
-	elseif self.type == 6 then
-		self.colour = {1,0,1,1} --purple
+	if self.type >= 1 then
+		self.colour = color_palettes.blocks[self.type]
 	end
 end	
 

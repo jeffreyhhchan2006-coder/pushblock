@@ -1,4 +1,5 @@
 score_popups = {}
+combo_popups = {}
 
 score_popup = object:new({
 	time_limit = 0.5,
@@ -33,6 +34,7 @@ function addScorePopup(x,y,score,combo)
 		combo = combo,
 		assoc_list = score_popups
 	}))
+	playSFX(score_sfx)
 end
 
 function updateScorePopups(dt)
@@ -46,6 +48,51 @@ end
 
 function drawScorePopups(dt)
 	for i,s in pairs(score_popups) do
+		s:draw(dt)
+	end
+end
+
+combo_popup = score_popup:new({
+	time_limit = 1,
+	blink_time = 0,
+	blink_interval = 0,
+	font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/6),
+	large_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/6.5),
+	draw = function (self)
+		if self.time % self.blink_interval > (self.blink_interval/2) then
+			return
+		end
+		local text = "COMBO: "..self.combo-1 --self.combo starts as 1, so need to subtract 1
+		--scale popup depending on score? IDK how to implement
+		local combo_brightness_mod = 0.3 - 0.7*self.combo/10
+		love.graphics.setColor(changeColorBrightness(rainbow_color:get(),-0.6 + combo_brightness_mod))
+		love.graphics.setFont(self.large_font)
+		love.graphics.print(text,love.graphics.getWidth()/2 - self.large_font:getWidth(text)/2,love.graphics.getHeight()/2 - self.large_font:getHeight()/1.5)
+		love.graphics.setColor(changeColorBrightness(rainbow_color:get(), combo_brightness_mod))
+		love.graphics.setFont(self.font)
+		love.graphics.print(text,love.graphics.getWidth()/2 - self.font:getWidth(text)/2,love.graphics.getHeight()/2 - self.font:getHeight()/1.5)
+	end
+})
+
+function addComboPopup(combo)
+	table.insert(combo_popups,combo_popup:new({
+		combo = combo,
+		assoc_list = combo_popups
+	}))
+	playSFX(combo_sfx)
+end
+
+function updateComboPopup(dt)
+	for i,s in pairs(combo_popups) do
+		s:update(dt)
+		if s.time > s.time_limit then
+			table.remove(combo_popups,i)
+		end
+	end
+end
+
+function drawComboPopups(dt)
+	for i,s in pairs(combo_popups) do
 		s:draw(dt)
 	end
 end

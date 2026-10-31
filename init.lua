@@ -1,10 +1,12 @@
 require "utilities"
+require "rainbow_color"
+require "objects"
 require "grid"
 require "board_square"
 require "game_board"
 require "block_board"
 require "backgrounds"
-
+require "player"
 
 function load_players()
 	table.insert(players, player:new({player = 1, assoc_board = block_board, assoc_game_board = game_board}))
