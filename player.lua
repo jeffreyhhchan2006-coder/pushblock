@@ -22,7 +22,17 @@ player = object:new({ --crash after transition to spell_menu
 		right = "d",
 		select = "k",
 		push = "j",
-		pushAll = "space"
+		pushAll = "space",
+		toSquare1 = "1",
+		toSquare2 = "2",
+		toSquare3 = "3",
+		toSquare4 = "4",
+		toSquare5 = "5",
+		toSquare6 = "6",
+		toSquare7 = "7",
+		toSquare8 = "8",
+		toSquare9 = "9",
+		toSquare10 = "0",
 	},
 	idle_time = 0,
 	idle_duration = 10, --if player doesn't move for 10 seconds, start removing influence
@@ -168,13 +178,9 @@ function player:controls_read(controls,board,dt)
 		return
 	end
 	if self.move_delay > 0 then
-		self:readInput(controls.push)
-		self:readInput(controls.pushAll)
-		self:readInput(controls.up)
-		self:readInput(controls.down)
-		self:readInput(controls.left)
-		self:readInput(controls.right)
-		self:readInput(controls.select)
+		for i,input in pairs(controls) do
+			self:readInput(input)
+		end
 	end
 end
 
@@ -201,6 +207,26 @@ function player:controls_act(controls,board,dt) --board is assoc_board
 			self:pushBlock(board)
 		elseif c == controls.pushAll then 
 			board:ExpungeBlocks()
+		elseif c == controls.toSquare1 then
+			self.gridy = 1
+		elseif c == controls.toSquare2 then
+			self.gridy = 2
+		elseif c == controls.toSquare3 then
+			self.gridy = 3
+		elseif c == controls.toSquare4 then
+			self.gridy = 4
+		elseif c == controls.toSquare5 then
+			self.gridy = 5
+		elseif c == controls.toSquare6 then
+			self.gridy = 6
+		elseif c == controls.toSquare7 then
+			self.gridy = 7
+		elseif c == controls.toSquare8 then
+			self.gridy = 8
+		elseif c == controls.toSquare9 then
+			self.gridy = 9
+		elseif c == controls.toSquare10 then
+			self.gridy = 10
 		end
 	end
 	self:move(board,x,y)
