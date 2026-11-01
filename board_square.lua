@@ -21,7 +21,7 @@ boardSquare = gridSquare:new({
 		love.graphics.setFont(big_font)
 		if self:isBlocked() then
 			love.graphics.setColor(1,0,0)
-			love.graphics.print("!", self.x - self.size/2, self.y)
+			love.graphics.print("!", self.x - self.size/4, self.y)
 		end
 	end
 })
