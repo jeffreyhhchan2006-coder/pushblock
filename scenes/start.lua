@@ -5,6 +5,7 @@ local scene = {}
 
 function scene.load()
 	logo = love.graphics.newImage("assets/images/logo.png")
+	highscore_logo = love.graphics.newImage("assets/images/highscore.png")
 	time = 0
 	initSaveData()
 	loadGame() --get data
@@ -25,6 +26,9 @@ function scene.update(dt)
 		  "game"  
 		)
 	end
+	
+	--rainbow color
+	rainbow_color:update(dt)
 end
 
 function scene.draw()
@@ -63,8 +67,13 @@ function scene.draw()
 		love.graphics.getWidth()*7/16,
 		love.graphics.getHeight()*15/32
 	)
+	love.graphics.push()
+		love.graphics.scale(0.7,0.7)
+		love.graphics.setColor(0,0,0)
+		love.graphics.draw(highscore_logo, love.graphics.getWidth()*4/32,love.graphics.getHeight()*17/32)
+	love.graphics.pop()
 	love.graphics.setColor(0.15,0.15,0.15)
-	love.graphics.print("Score Board:",love.graphics.getWidth()*3/32,love.graphics.getHeight()*7/16)
+	--love.graphics.print("Score Board:",love.graphics.getWidth()*3/32,love.graphics.getHeight()*7/16)
 	for i=1,5 do
 		love.graphics.print("	"..i..": "..data.score_board[i],love.graphics.getWidth()*3/32,love.graphics.getHeight()*((14+i)/32))
 	end
@@ -92,7 +101,7 @@ function scene.draw()
 	local text = "Press Enter to start"
 	local select_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/30)
 	love.graphics.setFont(select_font)
-	love.graphics.setColor(1,1,1)
+	love.graphics.setColor(changeColorBrightness(rainbow_color:get(),0.5))
 	love.graphics.print(text,love.graphics.getWidth()/2-select_font:getWidth(text)/2,750)
 end
 

@@ -29,9 +29,11 @@ function scene.load()
 	block_board:setBlocks()
 	delta_time = 0
 	game_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/30)
+	controls_font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/35)
 	intro_music_played = false
 	board_filled_timer = 0
 	duration_before_game_over = 0.5
+	details_logo = love.graphics.newImage("assets/images/details.png")
 end
 
 function love.keypressed(key, scancode, isrepeat )
@@ -190,15 +192,41 @@ function scene.draw()
 	love.graphics.pop()
 	
 	--UI
-	local text_margin = 10
+	local function drawUIBox(type,x,y,width,height,taper)
+		love.graphics.polygon(type,
+			x,y,
+			x + width - taper,y,
+			x + width, y + taper,
+			x + width, y + height - taper,
+			x + width - taper, y + height,
+			x, y + height
+		)
+	end
+
+	love.graphics.setColor(0.1,0.1,0.1,0.75)
+	drawUIBox("fill",0,100,325,love.graphics.getHeight()-200,60)
+	love.graphics.setColor(0.8,0.8,0.8)
+	drawUIBox("line",0,100,325,love.graphics.getHeight()-200,60)
+	
+	love.graphics.push()
+		love.graphics.scale(0.35,0.4)
+		love.graphics.setColor(1,1,1)
+		love.graphics.draw(details_logo,20/0.6,320) --108
+	love.graphics.pop()
+
+	local text_margin = 20
+	local score_text_start = 225
+	local score_text_gap = 25
 	love.graphics.setColor(1,1,1)
 	love.graphics.setFont(game_font)
-	love.graphics.print("Score: "..players[1].score, text_margin, 100)
-	love.graphics.print("Target: "..block_board.score_before_expunge_change, text_margin, 125)
-	love.graphics.print("Blocks Scored: "..players[1].blocks_scored, text_margin, 150)
+	love.graphics.print("Score: "..players[1].score, text_margin, score_text_start)
+	love.graphics.print("Target: "..block_board.score_before_expunge_change, text_margin, score_text_start + score_text_gap)
+	love.graphics.print("Blocks Scored: "..players[1].blocks_scored, text_margin, score_text_start + 2*score_text_gap)
 	--love.graphics.print("Combo Time: "..players[1].combo_time, text_margin, 200)
 	
-	love.graphics.print("W/S: Move Up/Down,\nJ: Push Block,\nK: Select/Switch Blocks, \nSpace: Expunge Blocks", text_margin, 650)
+	local controls_text_start = 150 + 18*score_text_gap
+	love.graphics.setFont(controls_font)
+	love.graphics.print("W/S: Move Up/Down,\nJ: Push Block,\nK: Select/Switch Blocks, \nSpace: Expunge Blocks", text_margin, controls_text_start )
 	
 	--Game Over Screen
 	if game_end then
