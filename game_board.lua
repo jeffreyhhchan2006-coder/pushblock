@@ -11,8 +11,8 @@ game_board = grid:new(
 --idk how fucky this is
 function game_board:update(dt)
 	self.square_size = self.size / self.rows
-	for y=1,self.columns do
-		for x=self.rows,1,-1 do
+	for x=self.rows,1,-1 do
+		for y=1,self.columns do
 			self.contents[y][x].size = self.square_size
 			self.contents[y][x].x = self.x + (x-1)*(self.square_size)
 			self.contents[y][x].y = self.y + (y-1)*(self.square_size)

@@ -158,9 +158,14 @@ function scene.draw()
 
 	drawBackground()
 	love.graphics.setFont(game_font)
-	--shading the baord background
+	--shading the board background
 	love.graphics.setColor(0,0,0,0.75)
 	love.graphics.rectangle("fill", game_board.x, game_board.y, game_board.size, game_board.size)
+	
+	--for the game area itself
+	love.graphics.push()
+	-- love.graphics.translate(game_board.x-100,game_board.y+game_board.size*1.6)
+	-- love.graphics.rotate(-math.pi/2)
 	
 	--game board
 	love.graphics.setColor(1,1,1)
@@ -181,6 +186,8 @@ function scene.draw()
 		--draw plyaer cursor
 		p:draw(block_board.square_size)
 	end
+	
+	love.graphics.pop()
 	
 	--UI
 	local text_margin = 10

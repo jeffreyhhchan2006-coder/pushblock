@@ -42,17 +42,25 @@ function game_boardSquare:matchBlocks()
 	
 	--finding connected blocks part
 	local scoring_blocks = square.assoc_block:findDirectOppositeBlocks() --start of loop
+	table.insert(scoring_blocks,self.assoc_block)
 	
 	--ensure no blocks are scored falling
 	for j,block1 in pairs(scoring_blocks) do
-		if block1.is_falling then
+		if block1.is_falling or block1.is_scored then
 			table.remove(scoring_blocks,j)
 			j = j - 1
 		end
 	end
 	
-	if #scoring_blocks > 0 then
-		--print("found matching blocks to score for block "..square.gridx..", "..square.gridy)
+	if #scoring_blocks > 1 then
+		print("found matching blocks to score for block "..square.gridx..", "..square.gridy)
+		
+		print("Initial scoring blocks: ")
+		for i,scored_block in pairs(scoring_blocks) do
+			print(i..": "..scored_block.assoc_square.gridx..", "..scored_block.assoc_square.gridy)
+		end
+		
+		print("Cheking opposite block of scoring blocks: ")
 		for i,scored_block in pairs(scoring_blocks) do
 			local old_scoring_blocks_num = #scoring_blocks
 			--print("size of scoring blocks in i="..i..": "..#scoring_blocks)
@@ -61,18 +69,30 @@ function game_boardSquare:matchBlocks()
 			
 			--make found list have unique blocks
 			if next(found_list) ~= nil then 
-				for i,block1 in pairs(scoring_blocks) do
-					for j,block2 in pairs(found_list) do
+				--issue with some block not scoring here
+				for i2,block1 in pairs(scoring_blocks) do --this prevents infinite loop
+					print("checking its existence in found list: ")
+					print("----------")
+					print(i2..": "..block1.assoc_square.gridx..", "..block1.assoc_square.gridy)
+					print("found list:")
+					for j = #found_list, 1, -1 do --always iterate backwards if you are deleting stuff from lists
+						print("j: "..j)
+						local block2 = found_list[j]
+						print(j..": "..block2.assoc_square.gridx..", "..block2.assoc_square.gridy)
 						--check if the block is same and if block2 is also falling
-						if (block1.assoc_square.gridx == block2.assoc_square.gridx and block1.assoc_square.gridy == block2.assoc_square.gridy) or block2.is_falling then
+						if (block1.assoc_square.gridx == block2.assoc_square.gridx and block1.assoc_square.gridy == block2.assoc_square.gridy) or block2.is_falling or block2.is_scored then
+							print(block2.assoc_square.gridx..", "..block2.assoc_square.gridy.." will be removed from found list due to existing in scoring blocks or is falling.")
 							table.remove(found_list,j)
-							j = j - 1
+							print("remaining found list blocks: "..#found_list)
+							print("j at end of loop: "..j)
 						end
 					end
+					print("end found list for loop")
 				end
 			end -- deleting same blocks in found_list as scoring_blocks
 			
 			for j,b in pairs(found_list) do --loop for inserting all unique found blocks to scoring blocks
+				print("inserting found list to scoring blocks")
 				table.insert(scoring_blocks,b)  
 			end
 			
@@ -91,7 +111,9 @@ function game_boardSquare:matchBlocks()
 	
 	--check game_board scored blocks, interrim blocks are not scored. Maybe because I'm only reading unscored blocks? I could just check whether is_scored is true...
 	--I think this works???
+	
 	for i,b in pairs(scoring_blocks) do
+		print(i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
 		if b.is_scored then
 			table.remove(scoring_blocks,i)
 			i = i - 1
@@ -104,6 +126,9 @@ function game_boardSquare:matchBlocks()
 		local total_score = 0
 		print("found >4 matching blocks to score: "..#scoring_blocks)
 		for i,scored_block in pairs(scoring_blocks) do
+			print(i..": "..scored_block.assoc_square.gridx..", "..scored_block.assoc_square.gridy)
+			--set block to score animate
+			scored_block:setBlockToScore(playerID)
 			--this part should only run once
 			--score block
 			local score_per_block = #scoring_blocks
@@ -112,8 +137,6 @@ function game_boardSquare:matchBlocks()
 			end
 			total_score = total_score + score_per_block
 			players[playerID]:addScore(score_per_block)
-			--set block to score animate
-			scored_block:setBlockToScore(playerID)
 		end
 		--calculate score
 		print("TOTAL SCORE (without counting combos): "..total_score)

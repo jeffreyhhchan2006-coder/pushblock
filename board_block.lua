@@ -131,12 +131,12 @@ function block:update(dt)
 	
 	--print("check if block is scored")
 	if self.is_scored then
-		print("score block")
+		print("score block "..self.assoc_square.gridx..", "..self.assoc_square.gridy)
 		print("scored block time: "..self.time)
 		print("scored block score time + duration:"..self.score_time + self.score_duration)
 		if self.time > (self.score_time + self.score_duration) then
 			-- remove block
-			print("delete scored block")
+			print("delete scored block "..self.assoc_square.gridx..", "..self.assoc_square.gridy)
 			self.assoc_square:removeBlock(self.player)
 			if SHIFT_BLOCKS_AFTER_SCORE then
 				-- shift column 1 square to the right
