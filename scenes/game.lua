@@ -136,6 +136,7 @@ function scene.update(dt)
 	
 	--players
 	for i,p in pairs(players) do
+		block_board:setPunishBlocks(dt,p.player)
 		p:update(dt)
 		block_board:changeExpungeWait(p.score)
 	end

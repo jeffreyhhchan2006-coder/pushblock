@@ -47,6 +47,20 @@ function game_board:checkGameCondition()
 	return how_much_filled / (self.player_area * self.columns)
 end
 
+function game_board:checkRowIsFilled(y)
+	local how_much_filled = 0
+	for x=self.rows,1,-1 do
+		if not self.contents[y][x]:isAssocBlockNil() then
+			how_much_filled = how_much_filled + 1
+		end
+	end
+	if how_much_filled == self.rows then
+		return true
+	else
+		return false
+	end
+end
+
 --game board functions
 function game_board:shiftRowAfterSquare(x,y) --shift row forwards
 	print("-----START OF SHIFT ROW-----")

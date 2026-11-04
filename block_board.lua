@@ -2,6 +2,9 @@
 block_board = grid:new(
 	{
 		assoc_game_board = {},
+		punish_blocks = 0,
+		punish_block_time = 0,
+		punish_block_wait = 0.5,
 		rows = 1, --row size
 		scaling_mult = 0,
 		refresh_time = 0,
@@ -38,11 +41,11 @@ function block_board:topUp()
 	end
 end
 
-function block_board:oldTopUp()
-	if next(self.contents[1][1].assoc_block) == nil then
-		self.contents[1][1]:setBlock(getRandomType()) 
-	end
-end
+-- function block_board:oldTopUp()
+	-- if next(self.contents[1][1].assoc_block) == nil then
+		-- self.contents[1][1]:setBlock(getRandomType()) 
+	-- end
+-- end
 
 function block_board:refresh()
 	if self.time > self.refresh_time then
@@ -59,6 +62,7 @@ function block_board:ExpungeBlocks()
 		end
 	end
 	playSFX(expunge_sfx)
+	self:checkPunishBlocks()
 	self:setBlocks()
 	self.expunge_time = self.expunge_wait
 	self.expunge_cooldown_time = self.expunge_cooldown_duration
@@ -86,5 +90,35 @@ end
 function block_board:updateExpungeCooldown(dt)
 	if self.expunge_cooldown_time > 0 then
 		self.expunge_cooldown_time = self.expunge_cooldown_time - dt
+	end
+end
+
+function block_board:checkPunishBlocks()
+	local isPunishBlock = false
+	for i=1,#self.contents do
+		if self.assoc_game_board:checkRowIsFilled(i) then
+			self.punish_blocks = self.punish_blocks + 1
+			isPunishBlock = true
+		end
+	end
+	if isPunishBlock then
+		self.punish_block_time = self.punish_block_wait
+	end
+end
+
+function block_board:setPunishBlocks(dt, playerID) --need to make it visual
+	if self.punish_block_time > 0 then
+		self.punish_block_time = self.punish_block_time - dt
+		return
+	end
+	if self.punish_blocks <= 0 then return end
+	for i=1,#self.contents do
+		if self.punish_blocks <= 0 then return end
+		if math.random() > 0.2 then goto continue end --random factor to where block would be placed
+		if self.assoc_game_board.contents[i][1]:isAssocBlockNil() then
+			self.assoc_game_board.contents[i][1]:setBlock(getRandomType(), playerID)
+			self.punish_blocks = self.punish_blocks - 1
+		end
+		:: continue ::
 	end
 end
