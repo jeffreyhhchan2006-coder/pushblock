@@ -1,5 +1,6 @@
 score_popups = {}
 combo_popups = {}
+punish_popups = {}
 
 score_popup = object:new({
 	time_limit = 0.5,
@@ -93,6 +94,49 @@ end
 
 function drawComboPopups(dt)
 	for i,s in pairs(combo_popups) do
+		s:draw(dt)
+	end
+end
+
+punish_popup = score_popup:new({
+	square_size = 0,
+	margin = 10,
+	time_limit = 1,
+	blink_time = 0,
+	blink_interval = 0,
+	font = love.graphics.newFont("fonts/Pix32.ttf", love.graphics.getHeight()/20),
+	draw = function (self)
+		local size = self.square_size - self.margin*2
+		love.graphics.setColor(1,0,0)
+		love.graphics.setLineWidth(5)
+		love.graphics.rectangle("line",self.x + self.margin, self.y + self.margin, size, size)
+		local text = "!"
+		love.graphics.setFont(self.font)
+		love.graphics.print(text,self.x + self.square_size/2 - self.font:getWidth(text)/2,self.y + self.square_size/2 - self.font:getHeight()/1.5)
+		love.graphics.setLineWidth(1)
+	end
+})
+
+function addPunishPopup(x,y,square_size)
+	table.insert(punish_popups,punish_popup:new({
+		x = x,
+		y = y,
+		square_size = square_size,
+		assoc_list = punish_popups
+	}))
+end
+
+function updatePunishPopup(dt)
+	for i,s in pairs(punish_popups) do
+		s:update(dt)
+		if s.time > s.time_limit then
+			table.remove(punish_popups,i)
+		end
+	end
+end
+
+function drawPunishPopups(dt)
+	for i,s in pairs(punish_popups) do
 		s:draw(dt)
 	end
 end

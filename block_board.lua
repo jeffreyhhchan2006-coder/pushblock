@@ -94,14 +94,12 @@ function block_board:updateExpungeCooldown(dt)
 end
 
 function block_board:checkPunishBlocks()
-	local isPunishBlock = false
 	for i=1,#self.contents do
 		if self.assoc_game_board:checkRowIsFilled(i) then
 			self.punish_blocks = self.punish_blocks + 1
-			isPunishBlock = true
 		end
 	end
-	if isPunishBlock then
+	if self.punish_blocks > 0 then
 		self.punish_block_time = self.punish_block_wait
 	end
 end
@@ -117,6 +115,9 @@ function block_board:setPunishBlocks(dt, playerID) --need to make it visual
 		if math.random() > 0.2 then goto continue end --random factor to where block would be placed
 		if self.assoc_game_board.contents[i][1]:isAssocBlockNil() then
 			self.assoc_game_board.contents[i][1]:setBlock(getRandomType(), playerID)
+			
+			addPunishPopup(self.assoc_game_board.contents[i][1].x,self.assoc_game_board.contents[i][1].y,self.assoc_game_board.contents[i][1].size)
+			
 			self.punish_blocks = self.punish_blocks - 1
 		end
 		:: continue ::

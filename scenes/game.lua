@@ -9,6 +9,9 @@ function scene.load()
 	
 	print("load function should only load once")
 	players = {}
+	score_popups = {}
+	combo_popups = {}
+	punish_popups = {}
 	load_board()
 	load_players()
 	time = 0
@@ -101,6 +104,7 @@ function scene.update(dt)
 	end
 	
 	if game_end then
+		block_board.punish_blocks = 0
 		stopAllMusic()
 		playMusic(game_over_music)
 		timer_before_transition = timer_before_transition + dt
@@ -141,6 +145,9 @@ function scene.update(dt)
 		block_board:changeExpungeWait(p.score)
 	end
 	
+	--punish blocks
+	updatePunishPopup(dt)
+	
 	--game over condition
 	if game_board:checkGameCondition() >= 1 then
 		board_filled_timer = board_filled_timer + dt
@@ -175,6 +182,7 @@ function scene.draw()
 	--love.graphics.rectangle("line", game_board.x, game_board.y, game_board.size, game_board.size)
 	game_board:draw()
 	drawScorePopups(dt)
+	drawPunishPopups(dt)
 	drawComboPopups(dt)
 	
 	--block board
