@@ -35,7 +35,7 @@ block = object:new({
 		
 		if self.is_scored then
 			if self.time % self.blink_interval > (self.blink_interval/2) then
-				return
+				love.graphics.setColor({1,1,1})
 			end
 		end
 		
