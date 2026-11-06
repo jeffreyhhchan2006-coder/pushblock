@@ -205,6 +205,9 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	newSquare.assoc_block.x = newSquare.x
 	newSquare.assoc_block.y = newSquare.y
 	self.assoc_block = {}
+	
+	table.insert(self.grid.dropped_blocks, newSquare.assoc_block)
+	
 	print("block moved from "..self.gridx..","..self.gridy.." to "..newSquare.gridx..", "..newSquare.gridy)
 	--self.grid:matchBlocks() --check whenever blocks move rather than always check, but idk why this lags more than updating it every dt
 end
