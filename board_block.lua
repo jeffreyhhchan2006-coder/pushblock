@@ -36,6 +36,8 @@ block = object:new({
 		if self.is_scored then
 			if self.time % self.blink_interval > (self.blink_interval/2) then
 				love.graphics.setColor({1,1,1})
+				love.graphics.rectangle( "fill", self.x+margin, self.y+margin, square.size - 2*margin, square.size - 2*margin)
+				return
 			end
 		end
 		
