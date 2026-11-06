@@ -100,13 +100,31 @@ function game_board:shiftRowAfterSquare(x,y) --shift row forwards
 	end
 end
 
+function game_board:removeDroppedBlock(x,y)
+	for i=#self.dropped_blocks,1,-1 do
+		if self.dropped_blocks[i].assoc_square.gridx == x and self.dropped_blocks[i].assoc_square.gridy == y then
+			table.remove(self.dropped_blocks,i)
+		end
+	end
+end
+
 function game_board:checkDroppedBlocks()
 	print("checking dropped blocks: size "..#self.dropped_blocks)
+	-- remove blocks that assoc_squares no longer refer to them
+	-- for i=#self.dropped_blocks,1,-1 do
+		-- print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
+		-- if self.dropped_blocks[i].assoc_square == nil then
+			-- table.remove(self.dropped_blocks,i)
+		-- elseif self.dropped_blocks[i].assoc_square:isAssocBlockNil() then
+			-- table.remove(self.dropped_blocks,i)
+		-- end
+	-- end
+	--check whether any dropped block is falling, if so, don't matchBlocks
 	for i,b in pairs(self.dropped_blocks) do
 		print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
 		if b.is_falling then return end
 	end
-	
+	--match blocks for remaining blocks
 	for i=#self.dropped_blocks,1,-1 do
 		self.dropped_blocks[i].assoc_square:matchBlocks()
 		table.remove(self.dropped_blocks,i)

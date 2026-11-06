@@ -197,6 +197,9 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	
 	print("Block "..self.gridx..", "..self.gridy.." affected by gravity...")
 	
+	--clearing old block from dropped blocks to remove lag
+	self.grid:removeDroppedBlock(self.gridx,self.gridy)
+	
 	local newSquare = self.grid.contents[newY][newX]
 	if next(newSquare.assoc_block) ~= nil then return end
 	--print("move block "..self.gridy)
@@ -206,6 +209,7 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	newSquare.assoc_block.y = newSquare.y
 	self.assoc_block = {}
 	
+	--inserting new block to dropped blocks
 	table.insert(self.grid.dropped_blocks, newSquare.assoc_block)
 	
 	print("block moved from "..self.gridx..","..self.gridy.." to "..newSquare.gridx..", "..newSquare.gridy)
