@@ -2,12 +2,40 @@ require "grid"
 require "game_board_square"
 
 game_board = grid:new(
-	{
+	{	
+		dropped_blocks = {},
 		gravity = {1,0},
 		player_area = 8		--x value
 	}, 
 	game_boardSquare --seperate square needed?
 )
+
+function game_board:new(obj,squareClass)
+	local obj = obj or {} 
+	setmetatable(obj, self)
+	self.__index = self
+	obj.contents = {}
+	obj.dropped_blocks = {}
+	obj.square_size = obj.size / obj.rows
+	for y=1,obj.columns do
+		table.insert(obj.contents,{})
+		for x=1,obj.rows do
+			table.insert(obj.contents[y],squareClass:new({
+			grid = obj, 
+			size = obj.square_size,
+			x = obj.x + (x-1)*(obj.square_size), 
+			y = obj.y + (y-1)*(obj.square_size),
+			gridx = x, 
+			gridy = y
+			}))
+		end
+	end
+	-- print("grid rows: "..obj.rows)
+	-- print("grid columns: "..obj.columns)
+	-- print("length of row 1: "..#obj.contents[1])
+	return obj
+end
+
 --idk how fucky this is
 function game_board:update(dt)
 	self.square_size = self.size / self.rows
@@ -71,3 +99,43 @@ function game_board:shiftRowAfterSquare(x,y) --shift row forwards
 		self.contents[y][i]:shiftBlock(1)
 	end
 end
+
+function game_board:checkDroppedBlocks()
+	print("checking dropped blocks: size "..#self.dropped_blocks)
+	for i,b in pairs(self.dropped_blocks) do
+		print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
+		if b.is_falling then return end
+	end
+	
+	for i=#self.dropped_blocks,1,-1 do
+		self.dropped_blocks[i].assoc_square:matchBlocks()
+		table.remove(self.dropped_blocks,i)
+	end
+end
+
+-- function game_board:checkFallingBlocks()
+	-- check if blocks are falling
+	-- for y=1,self.columns do
+		-- for x=self.rows,1,-1 do
+			-- check lose condition
+			-- if not self.contents[y][x]:isAssocBlockNil() then
+				-- if self.contents[y][x].assoc_block.is_falling then
+					-- return true
+				-- end
+			-- end
+		-- end
+	-- end
+	-- return false
+-- end
+
+-- function game_board:checkMatchBlock()
+	-- after no blocks are falling, check matches
+	-- for y=1,self.columns do
+		-- for x=self.rows,1,-1 do
+			-- check lose condition
+			-- if not self.contents[y][x]:isAssocBlockNil() then
+				-- self.contents[y][x]:matchBlocks()
+			-- end
+		-- end
+	-- end
+-- end

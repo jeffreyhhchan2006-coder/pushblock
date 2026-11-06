@@ -129,6 +129,7 @@ function scene.update(dt)
 	--everything below shouldn't update before scoring animations finish
 	--game board
 	game_board:update(dt)
+	game_board:checkDroppedBlocks()
 	
 	--block board
 	if EXPUNGE_BOARD_BLOCKS then

@@ -184,25 +184,14 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 			self.grid.contents[self.gridy][1]:setBlock(self.assoc_block.type, 1)
 			print("Remove block")
 			self:removeBlock(0)
-		else
-			self:matchBlocks()
-			-- self:matchBlocks()
 		end
 		
 		return
 	end
 	--check if block would go under the ground when its not supposed to
-	if (newX > self.grid.player_area and is_stop_at_player_area) then
+	if (newX > self.grid.player_area and is_stop_at_player_area) or self.assoc_block:isPieceBelow() then
 		print("Block "..self.gridx.. ","..self.gridy.." would be moved outside of player area to "..newX..", "..newY)
 		self.assoc_block.is_falling = false
-		self:matchBlocks() --not here, either put it somewhere else, or make matchBlocks for a singular block only
-		return
-	end
-	--check if block has another block below them
-	if self.assoc_block:isPieceBelow() then
-		print("Block "..self.gridx.. ","..self.gridy.." would be moved onto another block")
-		self.assoc_block.is_falling = false
-		self:matchBlocks()
 		return
 	end
 	
@@ -211,7 +200,7 @@ function game_boardSquare:moveBlock(direction, is_stop_at_player_area)
 	local newSquare = self.grid.contents[newY][newX]
 	if next(newSquare.assoc_block) ~= nil then return end
 	--print("move block "..self.gridy)
-	newSquare.assoc_block = copy(self.assoc_block) 
+	newSquare.assoc_block = self.assoc_block --copy()
 	newSquare.assoc_block.assoc_square = newSquare
 	newSquare.assoc_block.x = newSquare.x
 	newSquare.assoc_block.y = newSquare.y

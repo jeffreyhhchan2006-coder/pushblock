@@ -72,6 +72,8 @@ function boardSquare:pushBlock(player, game_board)
 		return 
 	end 
 	game_board.contents[self.gridy][1]:setBlock(self.assoc_block.type, player)
+	--Send block reference to game board's dropped blocks to handle scoring
+	table.insert(game_board.dropped_blocks, game_board.contents[self.gridy][1].assoc_block)
 	self:removeBlock(player)
 	playSFX(push_sfx)
 	print("player "..player.." push block on row "..self.gridy)

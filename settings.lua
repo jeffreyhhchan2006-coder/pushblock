@@ -1,4 +1,4 @@
-EXPUNGE_BOARD_BLOCKS = false
+EXPUNGE_BOARD_BLOCKS = true
 NUMBER_OF_TYPES = 6
 --Shift blocks feature
 HAVE_UNDER_GROUND = false
