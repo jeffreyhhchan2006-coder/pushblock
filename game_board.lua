@@ -102,23 +102,29 @@ end
 
 function game_board:removeDroppedBlock(x,y)
 	for i=#self.dropped_blocks,1,-1 do
+		if self.dropped_blocks[i].assoc_square == nil then
+			table.remove(self.dropped_blocks,i)
+			goto continue
+		end
+		
+		--print("removed dropped block i: "..i)
+		--print("size of dropped blocks: "..#self.dropped_blocks)
+		
 		if self.dropped_blocks[i].assoc_square.gridx == x and self.dropped_blocks[i].assoc_square.gridy == y then
 			table.remove(self.dropped_blocks,i)
 		end
+		:: continue ::
 	end
 end
 
 function game_board:checkDroppedBlocks()
 	print("checking dropped blocks: size "..#self.dropped_blocks)
-	-- remove blocks that assoc_squares no longer refer to them
-	-- for i=#self.dropped_blocks,1,-1 do
-		-- print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
-		-- if self.dropped_blocks[i].assoc_square == nil then
-			-- table.remove(self.dropped_blocks,i)
-		-- elseif self.dropped_blocks[i].assoc_square:isAssocBlockNil() then
-			-- table.remove(self.dropped_blocks,i)
-		-- end
-	-- end
+	--remove dropped blocks with nil assoc squares
+	for i=#self.dropped_blocks,1,-1 do
+		if self.dropped_blocks[i].assoc_square == nil then
+			table.remove(self.dropped_blocks,i)
+		end
+	end
 	--check whether any dropped block is falling, if so, don't matchBlocks
 	for i,b in pairs(self.dropped_blocks) do
 		print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
