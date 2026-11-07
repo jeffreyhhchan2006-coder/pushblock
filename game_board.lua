@@ -118,7 +118,7 @@ function game_board:removeDroppedBlock(x,y)
 end
 
 function game_board:checkDroppedBlocks()
-	print("checking dropped blocks: size "..#self.dropped_blocks)
+	--print("checking dropped blocks: size "..#self.dropped_blocks)
 	--remove dropped blocks with nil assoc squares
 	for i=#self.dropped_blocks,1,-1 do
 		if self.dropped_blocks[i].assoc_square == nil then
@@ -127,7 +127,7 @@ function game_board:checkDroppedBlocks()
 	end
 	--check whether any dropped block is falling, if so, don't matchBlocks
 	for i,b in pairs(self.dropped_blocks) do
-		print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
+		--print("block "..i..": "..b.assoc_square.gridx..", "..b.assoc_square.gridy)
 		if b.is_falling then return end
 	end
 	--match blocks for remaining blocks
