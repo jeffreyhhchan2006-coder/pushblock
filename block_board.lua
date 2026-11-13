@@ -116,6 +116,7 @@ function block_board:setPunishBlocks(dt, playerID) --need to make it visual
 		if self.assoc_game_board.contents[i][1]:isAssocBlockNil() then
 			self.assoc_game_board.contents[i][1]:setBlock(getRandomType(), playerID)
 			
+			--dropped_blocks for subsequent matchBlock checks after they fall
 			table.insert(self.assoc_game_board.dropped_blocks, self.assoc_game_board.contents[i][1])
 			
 			addPunishPopup(self.assoc_game_board.contents[i][1].x,self.assoc_game_board.contents[i][1].y,self.assoc_game_board.contents[i][1].size)

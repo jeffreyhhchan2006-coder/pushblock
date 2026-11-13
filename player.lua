@@ -11,7 +11,7 @@ player = object:new({ --crash after transition to spell_menu
 	combo = 1,
 	max_combo = 0,
 	combo_time = 0,
-	combo_time_limit = 0.5,
+	combo_time_limit = 1,
 	--controls
 	cooldown_time = 0.06,
 	input_delay = 0.04,
@@ -39,6 +39,7 @@ player = object:new({ --crash after transition to spell_menu
 	move_delay = 0, --for input delay, once move delay reaches input delay, inputs would be executed
 	move_cooldown = 0, --after inputs executed, have cooldown before inputs are accepted again (linked to cooldown_time)
 	inputs = {},
+	expired_inputs = {}, --for one time inputs
 	--Board
 	assoc_board = {},
 	assoc_game_board = {},
@@ -168,6 +169,18 @@ function player:readInput(input)
 			return
 		end
 	end
+	
+	--handle one-time expired inputs
+	
+	for j=#self.expired_inputs,1,-1 do
+		if not love.keyboard.isDown(self.expired_inputs[j]) then
+			table.remove(self.expired_inputs,j)
+		end
+		if self.expired_inputs[j] == input then
+			return
+		end
+	end
+	
 	if love.keyboard.isDown(input) then
 		table.insert(self.inputs,input)
 	end
@@ -195,6 +208,7 @@ function player:controls_act(controls,board,dt) --board is assoc_board
 			else
 				self:interact(board)
 			end
+			table.insert(self.expired_inputs, c) -- insert one time inputs as expired inputs
 		elseif c == controls.up then
 			y = -1
 		elseif c == controls.down then
@@ -207,6 +221,7 @@ function player:controls_act(controls,board,dt) --board is assoc_board
 			self:pushBlock(board)
 		elseif c == controls.pushAll then 
 			board:ExpungeBlocks()
+			self.selected_block = {}
 		elseif c == controls.toSquare1 then
 			self.gridy = 1
 		elseif c == controls.toSquare2 then

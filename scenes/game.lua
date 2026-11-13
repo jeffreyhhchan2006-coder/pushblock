@@ -129,7 +129,7 @@ function scene.update(dt)
 	--everything below shouldn't update before scoring animations finish
 	--game board
 	game_board:update(dt)
-	game_board:checkDroppedBlocks()
+	game_board:checkDroppedBlocks() --Checks only blocks that are dropped/falling and whether they score something or not. This circumvents having to check the entire board every frame for whether there are any matching blocks, having to run the resource intensive matchBlocks() for each square.
 	
 	--block board
 	if EXPUNGE_BOARD_BLOCKS then
